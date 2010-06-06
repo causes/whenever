@@ -4,7 +4,11 @@ module Whenever
 
       def output
         path_required
-        %Q(cd #{File.join(@path)} && script/runner -e #{@environment} #{task.inspect})
+
+        # single-quote and escape the ruby code for bash
+        sanitized = task.gsub(/'/) { |m| "'\\''" }
+
+        %Q(cd #{File.join(@path)} && script/runner -e #{@environment} '#{sanitized}')
       end
       
     end
